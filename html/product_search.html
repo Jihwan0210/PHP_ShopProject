@@ -1,0 +1,171 @@
+<!---------------------------------------------------------------------------------------------
+	제목 : 내 손으로 만드는 PHP 쇼핑몰무 (실습용 디자인 HTML)
+
+	소속 : 인덕대학교 컴퓨터소프트웨어학과
+	이름 : 교수 윤형태 (2024.02)
+---------------------------------------------------------------------------------------------->
+<!doctype html>
+<html lang="kr">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>INDUK Mall</title>
+	<link  href="css/bootstrap.min.css" rel="stylesheet">
+	<link  href="css/my.css" rel="stylesheet">
+	<script src="js/jquery-3.7.1.min.js"></script>
+	<script src="js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+<?PHP
+ include "main_top.php";
+ ?>
+<!-------------------------------------------------------------------------------------------->	
+<!-- 시작 : 다른 웹페이지 삽입할 부분 -->
+<!-------------------------------------------------------------------------------------------->	
+<div class="row m-1 mt-4 mb-0">
+	<div class="col" align="center">
+
+		<h4 class="m-3">상품검색</h4>
+
+		<hr class="m-0">
+		<table class="table table-sm mb-4">
+			<tr height="40" class="bg-light">
+				<td width="15%">이미지</td>
+				<td width="45%">상품정보</td>
+				<td width="20%">판매가</td>
+				<td width="20%">금액</td>
+			</tr>
+			<div class="row">
+<?php if ($total > 0): ?>
+	<?php while ($row = mysqli_fetch_array($result)) {
+		$id = $row['id'];
+		$name = $row['name'];
+		$image = $row['image1'];
+		$price = number_format($row['price']);
+		$discount = $row['discount'];
+		$sale_price = round($row['price'] * (100 - $discount) / 100, -3);
+		$discount_percent = $discount;
+	?>
+		<div class="col-sm-6 col-md-4 col-lg-3 mb-4 d-flex">
+			<div class="card w-100">
+				<div class="product-image d-flex justify-content-center align-items-center">
+					<a href="product.php?id=<?=$id?>">
+						<img src="product/<?=$image?>" class="card-img-top img-fluid">
+					</a>
+				</div>
+				<div class="card-body bg-light text-center">
+					<div class="card-title" style="font-size:20px;">
+						<a href="product.php?id=<?=$id?>">
+							<?=$name?>
+						</a>
+					</div>
+					<div class="icon-container">
+						<?php if ($row['icon_new']) : ?>
+							<img src="images/i_new.gif" width="50" alt="NEW">
+						<?php endif; ?>
+						<?php if ($row['icon_hit']) : ?>
+							<img src="images/i_hit.gif" width="50" alt="HIT">
+						<?php endif; ?>
+						<?php if ($row['icon_sale']) : ?>
+							<img src="images/i_sale.gif" width="50" alt="SALE">
+							<span class="discount-percent"><?=$discount_percent?>%</span>
+						<?php endif; ?>
+					</div>
+					<p class="card-text mt-2">
+						<?php if ($row['icon_sale']) : ?>
+							<small style="font-size:15px;"><strike><?=$price?> 원</strike></small>
+							&nbsp;&nbsp;<b style="font-size:15px;"><?=$sale_price?> 원</b>
+						<?php else: ?>
+							<b style="font-size:15px;"><?=$price?> 원</b>
+						<?php endif; ?>
+					</p>
+				</div>
+			</div>
+		</div>
+	<?php } ?>
+<?php else: ?>
+	<div class="col text-center text-muted mb-5">
+		<p>해당 조건의 상품이 없습니다.</p>
+	</div>
+<?php endif; ?>
+</div>
+
+<!--  Pagination -->
+<div class="row mb-4">
+	<div class="col">
+		<nav aria-label="Page navigation example">
+			<ul class="pagination pagination-sm justify-content-center">
+				<li class="page-item">
+					<a class="page-link" href="#" aria-label="First">
+						<span aria-hidden="true">◀</span>
+					</a>
+				</li>
+				<li class="page-item">
+					<a class="page-link" href="#" aria-label="Previous">
+						<span aria-hidden="true">◁</span>
+					</a>
+				</li>
+				<li class="page-item"><a class="page-link" href="#">1</a></li>
+				<li class="page-item active" aria-current="page">
+					<span class="page-link mycolor1">2</span>
+				</li>
+				<li class="page-item"><a class="page-link" href="#">3</a></li>
+				<li class="page-item"><a class="page-link" href="#">4</a></li>
+				<li class="page-item"><a class="page-link" href="#">5</a></li>
+				<li class="page-item">
+					<a class="page-link" href="#" aria-label="Next">
+						<span aria-hidden="true">▷</span>
+					</a>
+				</li>
+				<li class="page-item">
+					<a class="page-link" href="#" aria-label="Last">
+						<span aria-hidden="true">▶</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</div>
+
+<br><br><br>
+
+<!-------------------------------------------------------------------------------------------->	
+<!-- 끝 : 다른 웹페이지 삽입할 부분 -->
+<!-------------------------------------------------------------------------------------------->	
+
+<!-- 화면 하단 (main_bottom) : 회사소개/이용안내/개인보호정책 -->
+<hr class="m-0">
+<div class="row bg-light py-3  m-0 mb-5">
+	<div class="col-2" align="center">
+		<a href="index.html"><img src="images/footer_logo.png" width="120" class="img-fluid"></a>
+	</div>
+	<div class="col-7" align="left" style="line-height:15px;">
+
+		<h6><b>INDUK Mall</b></h6>
+		<font style="font-size:12px;">
+			상호: 인덕주식회사 | 대표 : 홍길동 | 사업자 등록번호 : 123-12-123345<br>
+			주소 : 21424 서울 노원구 초안산로 인덕대학교  | 전화 : 010-1111-2222 | Fax : 02-3333-4444<br>
+			개인정보관리책임자 : 홍길동 | 이메일 : honggd@induk.ac.kr<br>
+			<br>
+			Copyright © 2024 www.induk.ac.kr &nbsp; All Rights Reserved.
+		</font>
+	</div>
+	<div class="col-3" align="center" style="font-size:12px;">
+		<a href="company.html">회사소개</a>&nbsp; |&nbsp;
+		<a href="useinfo.html">이용안내</a>&nbsp; |&nbsp;
+		<a href="policy.html">개인정보정책</a>&nbsp; |&nbsp;
+		<a href="admin/index.html"><b>Admin</b></a></td>
+		<br><br>
+		<a href="http://www.ftc.go.kr/"><img src="images/footer_pic1.gif" border="0" class="img-fluid mb-2"></a>
+		<a href="http://www.sgic.co.kr/"><img src="images/footer_pic2.gif" border="0" class="img-fluid mb-2"></a>
+	</div>
+</div>
+<br>
+
+<!-------------------------------------------------------------------------------------------->	
+</div>
+
+</body>
+</html>

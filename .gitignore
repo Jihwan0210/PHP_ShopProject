@@ -1,0 +1,15 @@
+# Ignore local secret configuration files
+html/common.php
+html/juso/common.php
+html/sj/common.php
+
+# Ignore local user/test data
+html/member_data.csv
+
+# Common OS/editor files
+*.log
+*.env
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

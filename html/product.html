@@ -1,0 +1,217 @@
+<!---------------------------------------------------------------------------------------------
+	제목 : 내 손으로 만드는 PHP 쇼핑몰무 (실습용 디자인 HTML)
+
+	소속 : 인덕대학교 컴퓨터소프트웨어학과
+	이름 : 교수 윤형태 (2024.02)
+---------------------------------------------------------------------------------------------->
+<!doctype html>
+<html lang="kr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>INDUK Mall</title>
+    <link  href="css/bootstrap.min.css" rel="stylesheet">
+    <link  href="css/my.css" rel="stylesheet">
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+<?php
+include "main_top.php";
+$id = $_GET['id'] ?? 0;
+$sql = "SELECT * FROM product WHERE id = $id";
+$result = mysqli_query($db, $sql);
+$row = mysqli_fetch_array($result);
+?>
+<script>
+
+	function cal_price() 
+	{
+		form2.prices.value = (form2.num.value * form2.price.value).toLocaleString();
+		form2.num.focus();
+	}
+
+	function check_form2(str) 
+	{
+		if (form2.opts1.value==0) {
+			alert("옵션1을 선택하십시요.");
+			form2.opts1.focus();
+			return;
+		}
+		if (form2.opts2.value==0) {
+			alert("옵션2를 선택하십시요.");
+			form2.opts2.focus();
+			return;
+		}
+		if (!form2.num.value) {
+			alert("수량을 입력하십시요.");
+			form2.num.focus();
+			return;
+		}
+		if (str == "D") {
+			form2.action = "order.html";
+			form2.kind.value = "order";
+			form2.submit();
+		}
+		else {
+			form2.action = "cart_edit.html";
+			form2.submit();
+		}
+	}
+</script>
+
+<!-- form2 시작  -->
+<form name="form2" method="post" action="">
+<input type="hidden" name="kind" value="insert">
+<input type="hidden" name="id" value="0001">
+<input type="hidden" name="price" value="80000">
+
+<!--  상품 사진/정보(제품명,가격,옵션)  -->
+<div class="row mx-1 my-4">
+	<div class="col" align="center">
+
+		<table class="table table-sm table-borderless">
+			<tr>
+				<td valign="top" align="center" width="50%">
+					<img src="product/p1.png" width="80%" 
+						class="img-thumbnail img-fluid mt-2"  style="cursor:zoom-in" 
+						data-bs-toggle="modal" data-bs-target="#zoomModal">
+				</td>
+				<td  width="50%" align="center" valign="top" class="px-0">
+					<hr size="5px" width="100%" class="my-2">
+					<table width="100%" style="font-size:12px;" class="table table-sm table-borderless p-0 m-0">
+						<tr height="50">
+							<td colspan="2"  align="center" style="font-size:20px; color: #222222;">
+								상품명1
+							</td>
+						</tr>
+						<tr height="35">
+							<td colspan="2" align="center">
+								<img src="images/i_hit.gif"> <img src="images/i_sale.gif">&nbsp; <font color="red" size="3">20%</font>
+							</td>
+						</tr>
+						<tr><td colspan="2"><hr class="my-2"></td></tr>
+						<tr height="35">
+							<td width="30%" align="center">판매가</td>
+							<td width="70%" align="left" style="font-size:15px;"><strike>100,000</strike></td>
+						</tr>
+						<tr height="35">
+							<td  align="center">할인가</td>
+							<td style="font-size:15px;" align="left">80,000</td>
+						</tr>
+						<tr><td colspan="2"><hr class="my-2"></td></tr>
+						<tr>
+							<td align="center">옵션1</td>
+							<td  align="left">
+								<select name="opts1" class="form-select form-select-sm mb-2" style="width:90%;font-size:12px;">
+									<option value="0" selected>옵션을 선택하세요.</option>
+									<option value="1">흰색</option>
+									<option value="2">검정색</option>
+									<option value="3">파랑색</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td align="center">옵션2</td>
+							<td  align="left">
+								<select name="opts2" class="form-select form-select-sm" style="width:90%;font-size:12px;">
+									<option value="0" selected>옵션을 선택하세요.</option>
+									<option value="1">Large</option>
+									<option value="2">Midum</option>
+									<option value="3">Small</option>
+								</select>
+							</td>
+						</tr>
+						<tr><td colspan="2"><hr class="my-2"></td></tr>
+						<tr>
+							<td align="center">수량</td>
+							<td  align="left">
+								<div class="d-inline-flex">
+									<input type="text" name="num" size="5" value="1" 
+										class="form-control form-control-sm" style="text-align:center;"
+										onChange="javascript:cal_price()">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td align="center">금액</td>
+							<td align="left">
+								<div class="d-inline-flex">
+									<input type="text" name="prices" value="80,000" size="10" 
+										class="form-control form-control-sm"
+										style="border:0;background-color:white;text-align:left;font-size:18px;font-weight:bold;" readonly>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" height="100" align="center">
+								<a href="javascript:check_form2('D')" 
+									class="btn btn-sm btn-secondary text-light">바로 구매</a>&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="javascript:check_form2('C')" 
+									class="btn btn-sm btn-outline-secondary">장바구니</a>
+							</td>
+						</tr>
+					</table>
+
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</div>
+
+</form>
+<!-- form2 끝 -->
+
+<hr class="my-0 mx-3">
+
+<div align="center" class="px-3">
+    <p class="mb-4">📌 본 제품의 상세 설명입니다.</p>
+
+    <?php
+    for ($i = 1; $i <= 3; $i++) {
+        $img = $row["image{$i}"] ?? '';
+        if (!empty($img)) {
+            echo <<<HTML
+                <div class="mb-3">
+                    <img src="product/{$img}" class="img-fluid rounded shadow-sm" style="max-width:85%;">
+                </div>
+            HTML;
+        }
+    }
+
+    if (empty($row['image1']) && empty($row['image2']) && empty($row['image3'])) {
+        echo '<p class="text-muted">📂 등록된 상세 이미지가 없습니다.</p>';
+        echo '<img src="product/nopic.png" class="img-thumbnail" style="max-width:60%;">';
+    }
+    ?>
+</div>
+
+
+<br><br>
+
+<!-- Zoom Modal 이미지 -->
+<div class="modal fade" id="zoomModal" tabindex="-1" aria-labelledby="zoomModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title" id="zoomModalLabel">상품명1</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div align="center" class="modal-body">
+        <img src="product/p1.png" class="img-thumbnail" style="cursor:pointer" class="btn-close"  data-bs-dismiss="modal" aria-label="Close">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<?php
+include "main_bottom.php";
+?>
+
+</div>
+</body>
+</html>

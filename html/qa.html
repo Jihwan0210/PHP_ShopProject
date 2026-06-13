@@ -1,0 +1,59 @@
+<?php
+include "main_top.php";
+
+$text1 = $_REQUEST['text1'] ?? '';
+$filter = $text1 ? "WHERE title LIKE '%$text1%' OR content LIKE '%$text1%'" : '';
+
+$sql = "SELECT * FROM qa $filter ORDER BY id DESC";
+$result = mysqli_query($db, $sql);
+?>
+
+<div class="row m-1 mb-0 justify-content-center">
+    <div class="col" align="center">
+        <h4 class="mt-5 mb-3">Q & A</h4>
+        <hr class="my-0">
+        <table class="table table-sm m-0">
+            <tr height="35" class="bg-light">
+                <td width="10%">번호</td>
+                <td width="45%">제목</td>
+                <td width="15%">작성자</td>
+                <td width="20%">작성일</td>
+                <td width="10%">조회</td>
+            </tr>
+            <?php while($row = mysqli_fetch_array($result)) { ?>
+            <tr height="35">
+                <td><?= $row['id'] ?></td>
+                <td align="left">
+                    <?php if ($row['re_id']) echo '<img src="images/i_re.gif" border="0">&nbsp;'; ?>
+                    <a href="qa_read.php?id=<?= $row['id'] ?>" style="color:#0066CC"><?= htmlspecialchars($row['title']) ?></a>
+                </td>
+                <td><?= $row['name'] ?></td>
+                <td><?= substr($row['wdate'], 0, 10) ?></td>
+                <td><?= $row['view'] ?></td>
+            </tr>
+            <?php } ?>
+        </table>
+
+        <!-- 검색 및 새글 -->
+        <table class="table table-sm table-borderless mt-1 m-0">
+            <tr>
+                <td align="left">
+                    <form name="form2" method="post" action="qa.php">
+                        <div class="d-inline-flex">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text myfs13">제목+내용</span>
+                                <input type="text" name="text1" size="10" value="<?= $text1 ?>" class="form-control bg-light myfs13">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary myfs13">검색</button>&nbsp;
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                <td align="right">
+                    <a href="qa_new.php" class="btn btn-sm btn-dark text-white myfs13">새글</a>&nbsp;&nbsp;
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<?php include "main_bottom.php"; ?>
